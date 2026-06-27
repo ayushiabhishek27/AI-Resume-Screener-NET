@@ -3,55 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Enterprise AI Resume Screener</title>
+    <title>AI Resume Screener & Matcher</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-main: #f8fafc;
+            --bg-main: #f1f5f9;
             --bg-card: #ffffff;
             --text-main: #0f172a;
             --text-muted: #64748b;
-            --primary: #4f46e5;
-            --primary-hover: #4338ca;
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
             --accent: #e2e8f0;
             --success: #10b981;
-            --border: #e2e8f0;
+            --border: #cbd5e1;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
         body { background-color: var(--bg-main); color: var(--text-main); padding: 40px 20px; line-height: 1.5; }
-        .container { max-width: 900px; margin: 0 auto; }
+        .container { max-width: 950px; margin: 0 auto; }
         
-        header { margin-bottom: 32px; text-align: center; }
-        header h1 { font-size: 2.25rem; font-weight: 700; color: #1e1b4b; letter-spacing: -0.025em; }
-        header p { color: var(--text-muted); margin-top: 8px; font-size: 1.1rem; }
+        header { margin-bottom: 35px; text-align: center; }
+        header h1 { font-size: 2.5rem; font-weight: 700; color: #1e3a8a; letter-spacing: -0.025em; }
+        header p { color: var(--text-muted); margin-top: 10px; font-size: 1.15rem; }
 
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
-        .card { background: var(--bg-card); border: 1px solid var(--border); padding: 28px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); transition: transform 0.2s; }
-        .card:hover { transform: translateY(-2px); }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; margin-bottom: 24px; }
+        .card { background: var(--bg-card); border: 1px solid #e2e8f0; padding: 30px; border-radius: 14px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); transition: transform 0.2s, box-shadow 0.2s; }
+        .card:hover { transform: translateY(-3px); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
         .full-width { grid-column: span 2; }
         
-        h2 { font-size: 1.25rem; font-weight: 600; margin-bottom: 18px; display: flex; align-items: center; gap: 8px; color: #1e293b; }
-        .step-num { background: var(--primary); color: white; width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 0.85rem; font-weight: 700; }
+        h2 { font-size: 1.35rem; font-weight: 600; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; color: #1e293b; }
+        .step-num { background: var(--primary); color: white; width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; font-size: 0.9rem; font-weight: 700; }
         
-        label { font-weight: 500; font-size: 0.875rem; color: #475569; display: block; margin-top: 14px; margin-bottom: 4px; }
-        input, textarea { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 0.95rem; background: #f8fafc; transition: all 0.2s; }
-        input:focus, textarea:focus { outline: none; border-color: var(--primary); background: #fff; box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1); }
+        label { font-weight: 600; font-size: 0.875rem; color: #334155; display: block; margin-top: 16px; margin-bottom: 6px; }
+        input, textarea { width: 100%; padding: 12px 14px; border: 1px solid var(--border); border-radius: 8px; font-size: 0.95rem; background: #f8fafc; transition: all 0.2s; }
+        input:focus, textarea:focus { outline: none; border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15); }
         
-        input[type="file"] { padding: 8px; background: #fff; cursor: pointer; }
+        input[type="file"] { padding: 12px; background: #fff; cursor: pointer; border: 2px dashed var(--border); text-align: center; }
+        input[type="file"]:hover { border-color: var(--primary); background: #f8fafc; }
         
-        button { background: var(--primary); color: white; border: none; font-size: 0.95rem; font-weight: 600; padding: 12px 20px; width: 100%; border-radius: 8px; cursor: pointer; margin-top: 18px; transition: all 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; }
-        button:hover { background: var(--primary-hover); }
-        button:disabled { background: #94a3b8; cursor: not-allowed; }
+        button { background: var(--primary); color: white; border: none; font-size: 1rem; font-weight: 600; padding: 14px 20px; width: 100%; border-radius: 8px; cursor: pointer; margin-top: 20px; transition: all 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2); }
+        button:hover { background: var(--primary-hover); transform: translateY(-1px); }
+        button:disabled { background: #94a3b8; cursor: not-allowed; transform: none; box-shadow: none; }
 
-        .status-msg { margin-top: 12px; padding: 10px; border-radius: 6px; font-size: 0.9rem; font-weight: 500; display: none; }
-        .status-msg.success { display: block; background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
+        .status-msg { margin-top: 15px; padding: 12px; border-radius: 8px; font-size: 0.95rem; font-weight: 500; display: none; }
+        .status-msg.success { display: block; background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
         .status-msg.loading { display: block; background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; }
         .status-msg.error { display: block; background: #fef2f2; color: #991b1b; border: 1px solid #fca5a5; }
 
-        pre { background: #0f172a; color: #e2e8f0; padding: 20px; border-radius: 8px; white-space: pre-wrap; word-wrap: break-word; font-family: monospace; font-size: 0.95rem; margin-top: 15px; border-left: 4px solid var(--primary); max-height: 400px; overflow-y: auto; }
+        .output-box { background: #0f172a; color: #f8fafc; padding: 25px; border-radius: 10px; white-space: pre-wrap; word-wrap: break-word; font-family: 'Inter', sans-serif; font-size: 1rem; margin-top: 15px; border-left: 5px solid #3b82f6; max-height: 500px; overflow-y: auto; line-height: 1.6; }
         
-        .spinner { width: 18px; height: 18px; border: 2px solid #ffffff; border-top: 2px solid transparent; border-radius: 50%; animation: spin 0.8s linear infinite; display: none; }
+        .spinner { width: 20px; height: 20px; border: 2.5px solid #ffffff; border-top: 2px solid transparent; border-radius: 50%; animation: spin 0.8s linear infinite; display: none; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
@@ -59,58 +60,58 @@
 
     <div class="container">
         <header>
-            <h1>AI-Powered Resume Screening</h1>
-            <p>Accelerate your recruitment workflow with contextual automated evaluation matching</p>
+            <h1>AI Resume Screening Dashboard</h1>
+            <p>Instantly match job requirements against candidate profiles using intelligent AI analysis</p>
         </header>
 
         <div class="grid">
             <div class="card">
-                <h2><span class="step-num">1</span> Candidate Profiling</h2>
+                <h2><span class="step-num">1</span> Candidate Details</h2>
                 <label>Full Name</label>
-                <input type="text" id="candName" placeholder="Jane Doe">
+                <input type="text" id="candName" placeholder="e.g. John Doe">
                 
                 <label>Email Address</label>
-                <input type="email" id="candEmail" placeholder="jane.doe@example.com">
+                <input type="email" id="candEmail" placeholder="e.g. john.doe@email.com">
                 
                 <button id="btnCreate" onclick="createCandidate()">
-                    <span class="spinner" id="spinCreate"></span>Create System Record
+                    <span class="spinner" id="spinCreate"></span>Save Candidate Profile
                 </button>
                 <div id="candResult" class="status-msg"></div>
             </div>
 
             <div class="card">
-                <h2><span class="step-num">2</span> Digital Payload Upload</h2>
-                <label>Target Candidate System ID</label>
-                <input type="number" id="resumeCandId" placeholder="Awaiting Step 1 execution...">
+                <h2><span class="step-num">2</span> Upload Resume</h2>
+                <label>Assigned Candidate ID</label>
+                <input type="number" id="resumeCandId" placeholder="Will be filled automatically from Step 1...">
                 
-                <label>Document Stream (PDF Engine Only)</label>
+                <label>Choose Resume File (PDF format only)</label>
                 <input type="file" id="resumeFile" accept=".pdf">
                 
                 <button id="btnUpload" onclick="uploadResume()">
-                    <span class="spinner" id="spinUpload"></span>Parse Core Metrics
+                    <span class="spinner" id="spinUpload"></span>Upload & Extract Text
                 </button>
                 <div id="uploadResult" class="status-msg"></div>
             </div>
 
             <div class="card full-width">
-                <h2><span class="step-num">3</span> Orchestrate OpenAI Screening</h2>
-                <div style="display: grid; grid-template-columns: 150px 1fr; gap: 16px;">
+                <h2><span class="step-num">3</span> AI Matching & Assessment</h2>
+                <div style="display: grid; grid-template-columns: 160px 1fr; gap: 20px;">
                     <div>
-                        <label>Active Resume ID</label>
-                        <input type="number" id="screenResumeId" placeholder="Doc ID">
+                        <label>Loaded Resume ID</label>
+                        <input type="number" id="screenResumeId" placeholder="Document ID">
                     </div>
                     <div>
-                        <label>Target Role Specifications / Job Description</label>
-                        <textarea id="jobDesc" rows="5" placeholder="Paste structural requirements, required stacks, and target milestones..."></textarea>
+                        <label>Paste the Job Description (Requirements & Skills)</label>
+                        <textarea id="jobDesc" rows="5" placeholder="Paste the responsibilities, expected tech stack, and experience qualifications needed for the role..."></textarea>
                     </div>
                 </div>
                 
                 <button id="btnScreen" onclick="screenResume()">
-                    <span class="spinner" id="spinScreen"></span>Execute AI Evaluation Matrices
+                    <span class="spinner" id="spinScreen"></span>Calculate Match Score & Review
                 </button>
                 
-                <h3 style="margin-top: 24px; font-size: 1.1rem;">Pipeline Output Metrics:</h3>
-                <pre id="aiOutput">Awaiting generation matrix initialization...</pre>
+                <h3 style="margin-top: 28px; font-size: 1.2rem; color: #1e293b;">AI Analysis Report:</h3>
+                <div class="output-box" id="aiOutput">Awaiting profile and job summary submission...</div>
             </div>
         </div>
     </div>
@@ -137,9 +138,9 @@
         async function createCandidate() {
             const name = document.getElementById('candName').value;
             const email = document.getElementById('candEmail').value;
-            if(!name || !email) { alert("Please complete form properties."); return; }
+            if(!name || !email) { alert("Please enter both the name and email address."); return; }
 
-            setUIState('Create', true, 'Creating system instance...', '', 'candResult');
+            setUIState('Create', true, 'Creating profile in system database...', '', 'candResult');
             
             try {
                 const response = await fetch('/api/candidates', {
@@ -149,62 +150,68 @@
                 });
                 const data = await response.json();
                 
-                setUIState('Create', false, `Success! Candidate Database ID Assigned: ${data.id}`, 'success', 'candResult');
+                setUIState('Create', false, `Profile saved successfully! Database ID: ${data.id}`, 'success', 'candResult');
                 document.getElementById('resumeCandId').value = data.id;
             } catch(e) {
-                setUIState('Create', false, 'Infrastructure connection exception.', 'error', 'candResult');
+                setUIState('Create', false, 'Unable to connect to backend server.', 'error', 'candResult');
             }
         }
 
         async function uploadResume() {
             const candId = document.getElementById('resumeCandId').value;
             const fileInput = document.getElementById('resumeFile');
-            if(!candId || !fileInput.files[0]) { alert("Entity reference validation failure."); return; }
+            if(!candId || !fileInput.files[0]) { alert("Please save candidate info first and choose a PDF file."); return; }
             
             const formData = new FormData();
             formData.append("file", fileInput.files[0]);
+            formData.append("candidateId", candId);
 
-            setUIState('Upload', true, 'Initializing parsing array engines...', '', 'uploadResult');
+            setUIState('Upload', true, 'Reading resume contents and processing text...', '', 'uploadResult');
 
             try {
-                const response = await fetch(`/api/resumes/upload?candidateId=${candId}`, {
+                const response = await fetch('/api/resumes/upload', {
                     method: 'POST',
                     body: formData
                 });
                 const data = await response.json();
                 
-                setUIState('Upload', false, `Compiled! File Saved as Object Node ID: ${data.resumeId}`, 'success', 'uploadResult');
+                setUIState('Upload', false, `Resume successfully indexed! Document ID: ${data.resumeId}`, 'success', 'uploadResult');
                 document.getElementById('screenResumeId').value = data.resumeId;
             } catch(e) {
-                setUIState('Upload', false, 'Parsing subsystem exception occurred.', 'error', 'uploadResult');
+                setUIState('Upload', false, 'Failed to process or upload the PDF document.', 'error', 'uploadResult');
             }
         }
 
         async function screenResume() {
-            const resumeId = document.getElementById('screenResumeId').value;
+            const resumeId = parseInt(document.getElementById('screenResumeId').value);
             const jobDesc = document.getElementById('jobDesc').value;
-            if(!resumeId || !jobDesc) { alert("Execution parameters missing."); return; }
+            if(!resumeId || !jobDesc) { alert("Please provide a valid document ID and paste a job description."); return; }
 
             const btn = document.getElementById('btnScreen');
             const spinner = document.getElementById('spinScreen');
             
             btn.disabled = true;
             spinner.style.display = 'inline-block';
-            document.getElementById('aiOutput').innerText = "[PROCESSING] Transmitting text nodes to analysis context window...";
+            document.getElementById('aiOutput').innerText = "[Analyzing] Scanning resume sections against job keywords...";
 
             try {
-                const response = await fetch(`/api/resumes/screen?resumeId=${resumeId}&jobDescription=${encodeURIComponent(jobDesc)}`, {
-                    method: 'POST'
+                const response = await fetch('/api/resumes/screen', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        resumeId: resumeId,
+                        jobDescription: jobDesc
+                    })
                 });
                 const data = await response.json();
                 
                 if (data && data.result && data.result.trim() !== "") {
                     document.getElementById('aiOutput').innerText = data.result;
                 } else {
-                    document.getElementById('aiOutput').innerText = "Notice: No assessment matrix data returned from system.";
+                    document.getElementById('aiOutput').innerText = "Notice: The server did not return a valid assessment model response.";
                 }
             } catch(e) {
-                document.getElementById('aiOutput').innerText = "Error: Process crashed during system evaluation.";
+                document.getElementById('aiOutput').innerText = "Error: Something went wrong while running the AI analysis pipeline.";
             } finally {
                 btn.disabled = false;
                 spinner.style.display = 'none';
